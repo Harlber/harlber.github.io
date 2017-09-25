@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>逆向某fun | hana</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="在官网上下载最新版本（坑爹的是并不是最新版本）  用apktool反编译  apktool d [-s]  -f acfun_v4.4.1_portal.apk -o acfun   下载SmaliIDEA https://bitbucket.org/JesusFreke/smali/downloads/将反编译后工程导入as，添加为source root。接下来Run-&amp;gt;Edit Conf">
+<meta property="og:type" content="article">
+<meta property="og:title" content="逆向某fun">
+<meta property="og:url" content="http://yoursite.com/2017/09/25/逆向某fun/index.html">
+<meta property="og:site_name" content="hana">
+<meta property="og:description" content="在官网上下载最新版本（坑爹的是并不是最新版本）  用apktool反编译  apktool d [-s]  -f acfun_v4.4.1_portal.apk -o acfun   下载SmaliIDEA https://bitbucket.org/JesusFreke/smali/downloads/将反编译后工程导入as，添加为source root。接下来Run-&amp;gt;Edit Conf">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1740379-61a7d442b5ea0352.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1740379-3262b848971b4355.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/620">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1740379-25069c894c7ccda8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/960">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1740379-09eb21b4c3af6605.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/960">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1740379-296fca8b1eaee65d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/960">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1740379-252a35f07f878d61.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/960">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1740379-32d362b9a342ec46.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/960">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1740379-0ba80f7ce7b1cd6a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/960">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1740379-bcf4e291a8d7b0c9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/240">
+<meta property="og:updated_time" content="2017-09-25T09:12:44.248Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="逆向某fun">
+<meta name="twitter:description" content="在官网上下载最新版本（坑爹的是并不是最新版本）  用apktool反编译  apktool d [-s]  -f acfun_v4.4.1_portal.apk -o acfun   下载SmaliIDEA https://bitbucket.org/JesusFreke/smali/downloads/将反编译后工程导入as，添加为source root。接下来Run-&amp;gt;Edit Conf">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1740379-61a7d442b5ea0352.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/240">
+  
+    <link rel="alternate" href="/atom.xml" title="hana" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">hana</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-逆向某fun" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/09/25/逆向某fun/" class="article-date">
+  <time datetime="2017-09-25T09:07:22.000Z" itemprop="datePublished">2017-09-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      逆向某fun
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在官网上下载最新版本（坑爹的是并不是最新版本）</p>
+<ul>
+<li><p>用apktool反编译</p>
+<blockquote>
+<p>apktool d [-s]  -f acfun_v4.4.1_portal.apk -o acfun</p>
+</blockquote>
+</li>
+<li><p>下载SmaliIDEA <a href="https://bitbucket.org/JesusFreke/smali/downloads/" target="_blank" rel="external">https://bitbucket.org/JesusFreke/smali/downloads/</a><br>将反编译后工程导入as，添加为source root。<br>接下来Run-&gt;Edit Configurations 添加Remote，稍等要修改端口。</p>
+</li>
+<li><p>重新用apktool打包安装进手机</p>
+<blockquote>
+<p>apktool b acfun -o acfun_unsigned.apk</p>
+</blockquote>
+</li>
+</ul>
+<p><a href="">遇到问题1：安装的时候报了个解析软件包出现问题</a></p>
+<ul>
+<li>使用auto-sign重新打包<blockquote>
+<p>java -jar signapk.jar testkey.x509.pem testkey.pk8 acfun_unsigned.apk acfun_signed.apk</p>
+</blockquote>
+</li>
+</ul>
+<p>再次安装，安装成功，但显示了如下dialog</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1740379-61a7d442b5ea0352.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/240" alt="sign.jpg"></p>
+<ul>
+<li>打开smali工程，进入res/strings.xml查找该提示语</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/1740379-3262b848971b4355.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/620" alt="sign_string.png"></p>
+<ul>
+<li><p>在public.xml中查找该id资源</p>
+<blockquote>
+<public type="string" name="sign_check_content_text" id="0x7f080300">
+</public></blockquote>
+</li>
+<li><p>在smali中全局查找引用0x7f080300处</p>
+</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/1740379-25069c894c7ccda8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/960" alt="jni.png"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1740379-09eb21b4c3af6605.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/960" alt="show.png"></p>
+<ul>
+<li>再看dismiss方法</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/1740379-296fca8b1eaee65d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/960" alt="kill_pid.png"></p>
+<p>这就是为什么点击dialog应用会退出</p>
+<ul>
+<li><p>修改smali代码，将dismiss方法删除，重新打包安装，运行<br><a href="">遇到问题2：一直卡在Splash页面无法进入MainActivity</a></p>
+</li>
+<li><p>反编译dex文件，查看源码，经过刚才的smali文件中定位过的校验方法可知问题存在于SplashActivity，查看源码</p>
+</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/1740379-252a35f07f878d61.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/960" alt="splash.png"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1740379-32d362b9a342ec46.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/960" alt="utils.png"></p>
+<p>可以看出如果本地校验不通过，将一直循环调用setContontView，导致页面一直卡在SplashActivity，因此，光删除自杀代码还够，更应该修改校验逻辑</p>
+<ul>
+<li>强制设置校验通过<blockquote>
+<p>在move-result V0 下面添加 const/4 v0, 0x1</p>
+</blockquote>
+</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/1740379-0ba80f7ce7b1cd6a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/960" alt="true.png"><br>再次打包运行，可以进入MainActivity了，but。。。</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1740379-bcf4e291a8d7b0c9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/240" alt="vision.png"><br>坑爹呀，官网下的居然不是最新版本…</p>
+<ul>
+<li>修改版本号重新打包，或者手动强制修改dialog逻辑。。。</li>
+</ul>
+<p>以上只做学术研究，请勿用于商业目的</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/09/25/逆向某fun/" data-id="cj7zyyjdd0001f0uq8fw0cik2" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/09/25/hexo-guide/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Hexo Guide</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/09/25/逆向某fun/">逆向某fun</a>
+          </li>
+        
+          <li>
+            <a href="/2017/09/25/hexo-guide/">Hexo Guide</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Tesla<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
