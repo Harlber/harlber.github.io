@@ -112,5 +112,48 @@
       <comments>https://harlber.github.io/2017/09/25/read-clean-code/#disqus_thread</comments>
     </item>
     
+    <item>
+      <title>逆向某fun</title>
+      <link>https://harlber.github.io/2017/09/25/%E9%80%86%E5%90%91%E6%9F%90fun/</link>
+      <guid>https://harlber.github.io/2017/09/25/%E9%80%86%E5%90%91%E6%9F%90fun/</guid>
+      <pubDate>Mon, 25 Sep 2017 09:07:22 GMT</pubDate>
+      <description>
+      
+        
+        
+          &lt;p&gt;在官网上下载最新版本（坑爹的是并不是最新版本）&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;用apktool反编译&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;apktool d [-s]  -f acfun_v4.4.1_portal.apk -o acfun&lt;/p&gt;
+&lt;/blockqu
+        
+      
+      </description>
+      
+      <content:encoded><![CDATA[<p>在官网上下载最新版本（坑爹的是并不是最新版本）</p><ul><li><p>用apktool反编译</p><blockquote><p>apktool d [-s]  -f acfun_v4.4.1_portal.apk -o acfun</p></blockquote></li><li><p>下载SmaliIDEA <a href="https://bitbucket.org/JesusFreke/smali/downloads/" target="_blank" rel="external">https://bitbucket.org/JesusFreke/smali/downloads/</a><br>将反编译后工程导入as，添加为source root。<br>接下来Run-&gt;Edit Configurations 添加Remote，稍等要修改端口。</p></li><li><p>重新用apktool打包安装进手机</p><blockquote><p>apktool b acfun -o acfun_unsigned.apk</p></blockquote></li></ul><p><a href="">遇到问题1：安装的时候报了个解析软件包出现问题</a></p><ul><li>使用auto-sign重新打包<blockquote><p>java -jar signapk.jar testkey.x509.pem testkey.pk8 acfun_unsigned.apk acfun_signed.apk</p></blockquote></li></ul><p>再次安装，安装成功，但显示了如下dialog</p><p><img src="http://upload-images.jianshu.io/upload_images/1740379-61a7d442b5ea0352.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/240" alt="sign.jpg"></p><ul><li>打开smali工程，进入res/strings.xml查找该提示语</li></ul><p><img src="http://upload-images.jianshu.io/upload_images/1740379-3262b848971b4355.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/620" alt="sign_string.png"></p><ul><li><p>在public.xml中查找该id资源</p><blockquote><public type="string" name="sign_check_content_text" id="0x7f080300"></public></blockquote></li><li><p>在smali中全局查找引用0x7f080300处</p></li></ul><p><img src="http://upload-images.jianshu.io/upload_images/1740379-25069c894c7ccda8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/960" alt="jni.png"></p><p><img src="http://upload-images.jianshu.io/upload_images/1740379-09eb21b4c3af6605.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/960" alt="show.png"></p><ul><li>再看dismiss方法</li></ul><p><img src="http://upload-images.jianshu.io/upload_images/1740379-296fca8b1eaee65d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/960" alt="kill_pid.png"></p><p>这就是为什么点击dialog应用会退出</p><ul><li><p>修改smali代码，将dismiss方法删除，重新打包安装，运行<br><a href="">遇到问题2：一直卡在Splash页面无法进入MainActivity</a></p></li><li><p>反编译dex文件，查看源码，经过刚才的smali文件中定位过的校验方法可知问题存在于SplashActivity，查看源码</p></li></ul><p><img src="http://upload-images.jianshu.io/upload_images/1740379-252a35f07f878d61.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/960" alt="splash.png"></p><p><img src="http://upload-images.jianshu.io/upload_images/1740379-32d362b9a342ec46.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/960" alt="utils.png"></p><p>可以看出如果本地校验不通过，将一直循环调用setContontView，导致页面一直卡在SplashActivity，因此，光删除自杀代码还够，更应该修改校验逻辑</p><ul><li>强制设置校验通过<blockquote><p>在move-result V0 下面添加 const/4 v0, 0x1</p></blockquote></li></ul><p><img src="http://upload-images.jianshu.io/upload_images/1740379-0ba80f7ce7b1cd6a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/960" alt="true.png"><br>再次打包运行，可以进入MainActivity了，but。。。</p><p><img src="http://upload-images.jianshu.io/upload_images/1740379-bcf4e291a8d7b0c9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/240" alt="vision.png"><br>坑爹呀，官网下的居然不是最新版本…</p><ul><li>修改版本号重新打包，或者手动强制修改dialog逻辑。。。</li></ul><p>以上只做学术研究，请勿用于商业目的</p>]]></content:encoded>
+      
+      <comments>https://harlber.github.io/2017/09/25/%E9%80%86%E5%90%91%E6%9F%90fun/#disqus_thread</comments>
+    </item>
+    
+    <item>
+      <title>Hexo Guide</title>
+      <link>https://harlber.github.io/2017/09/25/hexo-guide/</link>
+      <guid>https://harlber.github.io/2017/09/25/hexo-guide/</guid>
+      <pubDate>Mon, 25 Sep 2017 08:12:56 GMT</pubDate>
+      <description>
+      
+        
+        
+          &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.
+        
+      
+      </description>
+      
+      <content:encoded><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>]]></content:encoded>
+      
+      <comments>https://harlber.github.io/2017/09/25/hexo-guide/#disqus_thread</comments>
+    </item>
+    
   </channel>
 </rss>
