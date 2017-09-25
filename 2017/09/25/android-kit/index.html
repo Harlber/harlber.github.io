@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="android 技能," />
+
+
+
+
+
+  <link rel="alternate" href="/rss2.xml" title="Keep learning" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="保活先从老式最基础的开始：  使用startService方式启动一个独立进程的服务，这样系统会在service意外死亡后自动重启。 使用RTC定时闹钟每5分钟检测一下（4.0以上基本无效） 启动linux守护进程，每几分钟检测一下进程是否存在，不存在就startService（5.0以下除MIUI和华为外有效）  5.0以上使用JobScheduler代替闹钟定时检测启动 。 启动隐藏的前台通知">
+<meta name="keywords" content="android 技能">
+<meta property="og:type" content="article">
+<meta property="og:title" content="日常开发技能指南（杂谈,持续更新）">
+<meta property="og:url" content="https://harlber.github.io/2017/09/25/android-kit/index.html">
+<meta property="og:site_name" content="Keep learning">
+<meta property="og:description" content="保活先从老式最基础的开始：  使用startService方式启动一个独立进程的服务，这样系统会在service意外死亡后自动重启。 使用RTC定时闹钟每5分钟检测一下（4.0以上基本无效） 启动linux守护进程，每几分钟检测一下进程是否存在，不存在就startService（5.0以下除MIUI和华为外有效）  5.0以上使用JobScheduler代替闹钟定时检测启动 。 启动隐藏的前台通知">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1740379-81ad81690ca65f90.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1740379-b8a58f85d0a7f5dd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1740379-c20ff2716d394672.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1740379-6b70a6d58944e733.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1740379-7deea03712813199.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1740379-9cdc7a53d8ca49b2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1740379-33a9834ad2181bbd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1740379-9a3c26b48d3e6748.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1740379-1d903c53b654aa35.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/620">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1740379-2de0f7c3ab1403a6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/620">
+<meta property="og:updated_time" content="2017-09-25T10:56:16.627Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="日常开发技能指南（杂谈,持续更新）">
+<meta name="twitter:description" content="保活先从老式最基础的开始：  使用startService方式启动一个独立进程的服务，这样系统会在service意外死亡后自动重启。 使用RTC定时闹钟每5分钟检测一下（4.0以上基本无效） 启动linux守护进程，每几分钟检测一下进程是否存在，不存在就startService（5.0以下除MIUI和华为外有效）  5.0以上使用JobScheduler代替闹钟定时检测启动 。 启动隐藏的前台通知">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1740379-81ad81690ca65f90.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://harlber.github.io/2017/09/25/android-kit/"/>
+
+
+
+
+
+  <title>日常开发技能指南（杂谈,持续更新） | Keep learning</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Keep learning</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://harlber.github.io/2017/09/25/android-kit/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tesla">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Keep learning">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">日常开发技能指南（杂谈,持续更新）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-25T18:55:19+08:00">
+                2017-09-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>保活</strong><br>先从老式最基础的开始：</p>
+<ul>
+<li>使用startService方式启动一个独立进程的服务，这样系统会在service意外死亡后自动重启。</li>
+<li>使用RTC定时闹钟每5分钟检测一下（4.0以上基本无效）</li>
+<li>启动linux守护进程，每几分钟检测一下进程是否存在，不存在就startService（5.0以下除MIUI和华为外有效） </li>
+<li>5.0以上使用JobScheduler代替闹钟定时检测启动 。</li>
+<li>启动隐藏的前台通知。（支付宝即采用该方式，为系统的一个bug，在7.1.1中已修复，具体体现为下拉任务栏可以看到该通知。）<strong>但这些措施都不能100%保活。尤其是M中引入的doze模式，在doze模式中甚至无网络连接。</strong></li>
+<li>官方建议：1.引导用户加入白名单；2.使用Google系列服务如GCM，Firebase</li>
+</ul>
+<p><strong>内存三级缓存思路</strong><br>对于列表页中的图片应使用LRU之类的内存缓存，对于activity和fragment销毁时应该把其对应的图片释放掉。每个图片都是有依赖引用的，我们一般默认是fragment或者是activity，当activity或者fragment销毁时，我们会将只依赖当前页面的图片移出LRU进行释放。</p>
+<ul>
+<li>内存图片缓存还是有三级：一级是bitmap列表，一级是LRU强引用，一级是弱引用。加载图片时，先在弱引用缓存和LRU强引用中查找没有被释放的bitmap，如果存在并满足复用条件，则不创建bitmap，而使用该图片内存，之后将其从弱引用或者LRU中移出放入bitmap列表强引用中。bitmap列表强引用保存了该图片依赖的直接控件。当view的onDetachedFromWindow被调用则从bitmap列表中移除只有依赖该view的对象到LRU强应用中。如果LRU强引用满了则放到弱引用中。</li>
+<li>这种方案可以达到如下效果：列表滑动、或者打开新页面时会申请较小的内存或不申请内存。列表页来回滑动时依然有缓存可用。</li>
+<li>对于adapterView和recycleView中的控件则需单独写个工具方法来封装一下。</li>
+<li>这里实际上已经不需要弱引用了，只要从LRU中移除即可调用recycle方法释放该图片。</li>
+<li>图片内存的申请和释放都由框架来控制，不由gc管理。</li>
+<li>LRU的大小就是可调，它里面的图片内存是都可以释放的，它只是作为缓存而存在。</li>
+</ul>
+<p><strong>卡顿问题快速定位的方法<a href="">GPU monitor分析</a></strong>：</p>
+<ul>
+<li>打开开发者模式中GPU呈现模式分析，查看是那种颜色条高</li>
+<li>如果是蓝色偏高，说明是单位消息里CPU太耗时，得把方法的执行都打出来看看哪个耗时。比如，在某处先看看是不是应该出现onMeasure，然后可以通过sdk自带的View布局工具，看一下哪个View的onMeasure耗时最多。</li>
+<li>如果红色偏高，说明GPU忙不过来。优化过渡绘制，使用离屏缓存来优化。</li>
+<li>黄色偏高，说明半透明GPU不仅在忙着绘制你的window也还忙着绘制别的，可能的情况为透明window叠加多了，window里的contentView有多个且相对复杂，或者GPU降频了等等，想具体分析需要查看GPU的trace。</li>
+<li>画动画时蓝色偏高是不正常的</li>
+</ul>
+<p><strong>蓝色偏高的常见原因：</strong>1. 动画或者交互时缓存失效的太多，验证方法是打出方法trace看看是不是有很多次的invalidate调用和dispatchDraw耗时在前面。2. 触发了GC，验证看看trace中主线程是不是被莫名的暂停了。3. 触发了layout，这种蓝色会很高，trace中measure方法会耗时较高。</p>
+<p><strong>如何优化启动速度</strong><br>没有闪屏页activity，一旦存在闪屏页activity那么启动速度就不大可能在200ms内跳过。<br>把window的背景设置为闪屏页，一旦MainActivity加载完毕就显示主页了。<br>虽然用户也会看到一个类似的闪屏页，但那个闪屏页实际只是activity在theme中设置的background。<br>之前好像有人问我怎么优化启动速度。这个方案适合启动画面不是作为广告页只是过渡页使用的场景。</p>
+<pre><code>&lt;item name=&quot;android:windowBackground&quot;&gt;@drawable/splash_logo&lt;/item&gt;
+</code></pre><p><strong>自定义高性能可拖动GridView</strong><br>在拖动过程中没有触发过invalidate，也没有触发requestLayout，别的应用每次移动动画会触发notifyDateChange，这会触发layout，影响性能。我们在拖动过程中会建立虚拟的视觉关系，只要不松手就会改变子view的顺序，只有松手才触发datechange。<br><strong>提升性能绘制方法</strong></p>
+<ul>
+<li>调用方法把它移出可见区域，移出可见区域后，在进行绘制的时候 native 层也不会去绘制它。</li>
+</ul>
+<p><strong>TextView优化</strong></p>
+<ul>
+<li>列表直接不用textview，自定义view，通过提前缓存 StaticLayout提升TextView性能，可参考：<a href="http://ragnraok.github.io/textview-pre-render-research.html" target="_blank" rel="external">http://ragnraok.github.io/textview-pre-render-research.html</a></li>
+</ul>
+<p><strong>Fragment留意点</strong><br>每个页面都是Fragment，自己管理其生命周期和栈，每次启动是以window的方式添加进来，进入动画为window动画，手势回退为View动画，为了节省内存，页面栈只保留2个对象，FragmentManager会进行回收释放和Fragment的恢复。</p>
+<ul>
+<li>优点：加载动画非常流畅，内存占用低，支持页面的无穷层级叠加。</li>
+<li>缺点：以Window方式启动，很多系统的特性需要自己实现，难以驾驭。</li>
+</ul>
+<p><strong>状态栏兼容注意点</strong><br>针对状态栏我们单独适配了4.4以上版本，5.0以上版本，6.0以上版本，Flyme系统，6.0以上的Flyme系统，MIUI系统，6.0以上的MIUI系统，YunOS系统，VIVO Funtouch 2.5以下版本和2.5以上版本…….</p>
+<p><strong>try-catch</strong></p>
+<ul>
+<li>如果你的代码一定会抛出异常，那try catch会有一些影响。</li>
+<li>一旦捕获到异常，系统打到寄存器中获取当前函数调用栈，生成一堆信息，这总归是浪费性能的。</li>
+<li>所以说一般不影响，非要扣那肯定影响，本来get方法可以进行内联的，用来try catch肯定就不能进行内联优化了，就会让性能下降一点。</li>
+<li>android这几个版本推出了JIT，art虚拟机中重点对内联函数的范围进行扩充，try catch会阻止这些优化。</li>
+<li>在android 5.0以上（ART进行OPT优化时）所有函数中存在try catch的方法都不能被JIT优化和进行内联优化</li>
+</ul>
+<p><strong>查看应用真实内存</strong></p>
+<ul>
+<li><p>adb shell dumpsys meminfo 你的包名 （monitor中不会显示WebView的内存占用）</p>
+</li>
+<li><p>（注意点）开了线程来执行耗时操作，可是这耗时操作执行的时候把主线的CPU占用给抢了。。。。</p>
+</li>
+</ul>
+<p><strong>高绘制性能函数</strong><br>看一个ListView的函数</p>
+<pre><code>offsetChildrenTopAndBottom(int index)
+</code></pre><p>这个方法性能很高，但是隐藏方法，listView移动子控件是用这个方法来移动的，它不破坏缓存，系统相当于是做了1+1+1+2，我们自己做就是1+2+1+2+1+2，我们自己写ListView的时候发现了这个函数，我们做for循环的性能还是不如系统的这个隐藏方法。</p>
+<p><strong>使用windowManager的addView来添加控件</strong><br>例子：通过调用Fragment的onCreateView来生成一个View，然后addView进来，这导致跳转界面需要较长时间。现在得先addView一个View到windowManager中，然后在调用onCreateView，因为windowManager添加控件是在server进程，所以会立即addView进来，这时这里的View就需要显示点东西，这就需要类似windowBackground的东西来显示。windowBackground它存在的目的就是为了加快界面响应。</p>
+<p><strong>实现自己的windowbackground</strong><br>先add一个类似decoreView进来，设置decoreView的background为windowBackground，然后在往这个decoreView上添加实际的控件。</p>
+<p><strong>避免使用LayoutParams实现动画</strong></p>
+<ul>
+<li>setLayoutParams()会触发requestLayout()从而导致所有View重新measure、layout、draw，导致卡顿。<br>排查方法：可以用布局边界排查大小变化的。<br>例：爱范儿 下拉刷新。(排查方法为：重写顶端控件的requestLayout方法，打上断点，看看动画或者交互过程中谁调用到了这个方法)</li>
+</ul>
+<ul>
+<li>还有查看谁刷新了页面导致重绘的排查方法是：重写顶端控件的invalidateChildInParent方法，看看谁调用到了。</li>
+</ul>
+<p><strong>使用硬件离屏缓存进行优化。（要保证缓存不失效）</strong></p>
+<pre><code>正确的使用：显示硬件层更新绿色闪一下。
+
+错误的使用：过程中一直绿色。
+
+错误例：微信大图。
+
+正确例：掌阅首页切换
+</code></pre><ul>
+<li>硬件加速本质上是属于window级别的东西，在创建ViewRootImpl的时候就确定了是否使用硬件加速，View级别所谓的关闭只是创建一张bitmap然后调用View的draw方法往这个上面绘制，绘制完成再往硬件加速的canvas上绘制。</li>
+<li>系统对OpenGl方法进行了封装和优化，封装实现了canvas的方法，使用它有的时候比直接使用OpenGl性能还好。所以开硬件加速几乎等效于调用OpenGl接口来绘制，OpenGl是通用绘制接口，一般GPU都会实现这些接口，所以硬件加速是让GPU来绘制，而非硬件加速就是CPU自己绘制。</li>
+<li>CPU要实现那么多的通用计算，而GPU就那么几个简单接口，它就极端优化，所以这几个简单方法的性能非常高。(OpenGl标准方法创建纹理很耗时，一张1080p的全屏图需要40ms以上，而android系统自己私有的方法10ms以内就创建完毕了)</li>
+<li>Opengl创建纹理（texture）太耗时,后面使用比系统的速度快，系统被它那套递归绘制等拖累了性能。(opengl来实现ViewPager的效果，android2.2手机除了初始化创建交互的纹理，进行移动的时候8ms左右一帧。)</li>
+</ul>
+<p><strong>主动释放控件资源</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">	<span class="comment">//释放布局资源</span></div><div class="line">   <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">releaseDradable</span><span class="params">(View view)</span></span>&#123;</div><div class="line">        <span class="keyword">if</span> (view <span class="keyword">instanceof</span> ViewGroup) &#123;</div><div class="line">        <span class="keyword">int</span> count = ((ViewGroup)view).getChildCount();</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;count;i++) &#123;</div><div class="line">             View childView = ((ViewGroup)view).getChildAt(i);</div><div class="line">             <span class="keyword">if</span> (childView <span class="keyword">instanceof</span> ViewGroup) &#123;</div><div class="line">                  releaseDradable(childView);</div><div class="line">               &#125;<span class="keyword">else</span> &#123;</div><div class="line">                releaseOneDrawable(childView);</div><div class="line">              &#125;</div><div class="line">          &#125;</div><div class="line">         &#125;<span class="keyword">else</span> &#123;</div><div class="line">            releaseOneDrawable(view);</div><div class="line">        &#125;</div><div class="line">  &#125;</div><div class="line"><span class="comment">//释放常见控件的资源,imageView是多种控件的根类</span></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">releaseOneDrawable</span><span class="params">(View view)</span></span>&#123;</div><div class="line">    <span class="keyword">if</span> (view !=<span class="keyword">null</span>) &#123;</div><div class="line">        BitmapDrawable src;</div><div class="line">        BitmapDrawable backGround;</div><div class="line">        <span class="keyword">if</span> (view <span class="keyword">instanceof</span> ImageView) &#123;</div><div class="line">            src = (BitmapDrawable) ((ImageView) view).getDrawable();</div><div class="line">            recycleBitmap(src.getBitmap());</div><div class="line">        &#125;</div><div class="line">        backGround = (BitmapDrawable) view.getBackground();</div><div class="line">        recycleBitmap(backGround.getBitmap());</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">private</span>  <span class="keyword">void</span> <span class="title">recycleBitmap</span><span class="params">(Bitmap bitmap)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (bitmap != <span class="keyword">null</span> &amp;&amp; !bitmap.isRecycled()) &#123;</div><div class="line">        bitmap.recycle();</div><div class="line">        bitmap = <span class="keyword">null</span>;    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>以上思路存在一个问题，即当某一个资源被多个activity引用时，回收该资源则会造成其他持有该资源的activity发生异常。</p>
+<ul>
+<li><p>维护一个Drawable链表用以记录引用次数</p>
+</li>
+<li><p>将控件的getDrawable()和getBackground()设置为null</p>
+</li>
+</ul>
+<p><strong>系统Viewpager的性能优化</strong></p>
+<ul>
+<li>V4包里的SwipeRefreshLayout类在接收到down事件的时候，会调用bringToFront方法，该方法会触发requestLayout。</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/1740379-81ad81690ca65f90.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="SwipeRefreshLayout.jpg"></p>
+<p><em>这里主要是优化ViewPager在添加和删除item的时候，会触发requestLayout导致的卡顿问题。第一次加载是没有优化的，因为必须得触发layout。
+</em><br>经过分析，我们的场景不需要这个方法，就去掉了该方法，<br>viewPager的adapter中instantiateItem()会执行container.addView(object)，这也会触发requestLayout；destroyItem也会触发requestLayout。可以替换为attachViewToParent和detachViewFromParent方法来进行add和remove。这俩方法是listView中进行动态add和remove的方法，性能很高，不会让缓存失效和触发requestLayout。</p>
+<p>我们的ViewPager的setOffscreenPageLimit设置为1。调用detachViewFromParent方法后为了让ViewPager重新录制一下View的绘制，所以又手动调用了invalidate。<br><em>录制绘制就是dispatchDraw流程，不然会走getDisplayList流程</em></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1740379-b8a58f85d0a7f5dd.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="destroyItem.jpg"></p>
+<p>在 instantateItem()中调用如下代码</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1740379-c20ff2716d394672.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="调用代码.png"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1740379-6b70a6d58944e733.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="instantateItem.jpg"></p>
+<p><strong>微信db打开方式</strong><br>用户设备的IMEI+uin值计算MD5值，注意是小写字符，然后在取MD5的前7位字符构成的密码。</p>
+<p><strong>关于RelativeLayout的使用</strong><br>大量使用了RelativeLayout，导致了多次mesure，一个relativelayout都要measure两次，多个层次这种叠加之后，measure次数指数级上升。</p>
+<p><strong>关于 SoftwareRefrence</strong><br>在android低版本上，SoftwareRefrence是遵循java标准的GC回收流程，即只有触发GC的情况为内存不足时，才会去检查SoftReference，但在高版本上，SoftReference被检查的更频繁了，即不是只有内存不足时才去检查，其存在的概率与WeakReference接近。</p>
+<p><strong>FragmentTabHost的问题</strong><br>每次FragmentTabHost切换fragment时会调用onCreateView()重绘UI。<br>解决方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> FragmentTransaction <span class="title">doTabChanged</span><span class="params">(String tabId,</span></span></div><div class="line"><span class="function"><span class="params">		FragmentTransaction ft)</span> </span>&#123;</div><div class="line">	TabInfo newTab = <span class="keyword">null</span>;</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; mTabs.size(); i++) &#123;</div><div class="line">		TabInfo tab = mTabs.get(i);</div><div class="line">		<span class="keyword">if</span> (tab.tag.equals(tabId)) &#123;</div><div class="line">			newTab = tab;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">if</span> (newTab == <span class="keyword">null</span>) &#123;</div><div class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"No tab known for tag "</span> + tabId);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">if</span> (mLastTab != newTab) &#123;</div><div class="line">		<span class="keyword">if</span> (ft == <span class="keyword">null</span>) &#123;</div><div class="line">			ft = mFragmentManager.beginTransaction();</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">if</span> (mLastTab != <span class="keyword">null</span>) &#123;</div><div class="line">			<span class="keyword">if</span> (mLastTab.fragment != <span class="keyword">null</span>) &#123;</div><div class="line">				<span class="comment">// 将detach替换为hide，隐藏Fragment</span></div><div class="line">				<span class="comment">// ft.detach(mLastTab.fragment);</span></div><div class="line">				ft.hide(mLastTab.fragment);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">if</span> (newTab != <span class="keyword">null</span>) &#123;</div><div class="line">			<span class="keyword">if</span> (newTab.fragment == <span class="keyword">null</span>) &#123;</div><div class="line">				newTab.fragment = Fragment.instantiate(mContext,</div><div class="line">						newTab.clss.getName(), newTab.args);</div><div class="line">				ft.add(mContainerId, newTab.fragment, newTab.tag);</div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line">				<span class="comment">// 将attach替换为show，显示Fragment</span></div><div class="line">				<span class="comment">// ft.attach(newTab.fragment);</span></div><div class="line">				ft.show(newTab.fragment);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		mLastTab = newTab;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> ft;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>app启动优化</strong></p>
+<ul>
+<li><p>之前优化软件启动时间的时候，就是Application的attachBaseContext()开启method trace，首页的dispatchDraw方法被调用之后关闭，然后这段时间CPU都干了什么。</p>
+</li>
+<li><p>耗时的操作放到了dispatchDraw方法之后post一个回调来执行。</p>
+<pre><code>Looper.getMainLooper().setMessageLogging(new Printer() {
+         @Override
+         public void println(String x) {
+             Log.e(&quot;msg&quot;, x);
+         }
+     });
+</code></pre></li>
+</ul>
+<p>用这个来测算每个消息花了多长时间，如果消息的执行时间超过了16ms，则获取当前的函数调用栈。<br>（可以确保你的耗时操作在页面显示之后才执行。）</p>
+<ul>
+<li>或者还有个onPostResume()方法，我们现在已经不用View的绘制之后再执行操作了，我们改为放到onPostResume方法中执行。（draw方法执行了，页面就显示了，然后不会黑屏或者白屏了）</li>
+<li>app启动流程：Application的构造方法-&gt;attachBaseContext()-&gt;onCreate()-&gt;Activity的构造方法-&gt;onCreate()-&gt;配置主题中背景灯属性-&gt;onStart()…</li>
+</ul>
+<p><strong>关于inflate</strong></p>
+<ul>
+<li><p>inflate本身是io操作，而手机性能下降很大的一个原因就是io性能变差。</p>
+</li>
+<li><p>动态添加可以解决 xml 加载时间问题；自定义view 可以解决嵌套层级问题。</p>
+</li>
+</ul>
+<p><strong>strings文件下多个同种类型字符串的问题</strong></p>
+<ul>
+<li><string name="part_inquiry_status_hit">共有%1$s条报价，已下%2$s单</string></li>
+<li><string name="part_inquiry_status_hit" formatted="false">&lt;![CDATA[共有%s条报价，已下%s 单&gt;]]&gt;</string>
+
+</li>
+</ul>
+<p><strong>RecyclerView的item的其他思路</strong></p>
+<ul>
+<li>recyleView中所有类型的item均为继承View，内容完全自己canvas绘制（一个个add进去），View中保存每个item的状态，获得该状态则可绘制出该View，bindView中无xml的inflate，已展示过的item再次显示时无需measure和耗时计算，ViewPager中limited item数为默认1，item被移除时，View内存被释放，再次进入时依靠保存的数据复原原item，此为同步操作。目前看来复原速度很快，用户对其是复原还是缓存的是感知不出来的。</li>
+<li>android的新版本上也measure的结果进行了缓存，文本的测量也使用了100多K的空间进行全局缓存。</li>
+</ul>
+<p><strong>今日头条跟手回退实现–群分享记录</strong></p>
+<ul>
+<li><p>今日头条也是基于Activity的透明主题来实现的，但是这个方案都有两个缺点，一就是叠加层级一多，滑动性能会下降明显，基本叠加5层就很卡了，二是透明主题破坏了系统内存回收释放的策略，导致所有的activity都是前台Activity，系统都不会回收，就会OOM。解决这个问题有一个方案就是利用android 4.4里提供的动态设置Activity透明主题来实现，当叠加了三层之后就将底部的第三层改为非透明主题。</p>
+<pre><code>   /**
+    * 动态将一个activity设置为不透明主题
+    *
+   * @param activity
+   */
+  public static void convertActivityFromTranslucent(Activity activity) {
+           try {
+                  Method method = Activity.class.getDeclaredMethod(&quot;convertFromTranslucent&quot;);
+                  method.setAccessible(true);
+                  method.invoke(activity);
+               } catch (Throwable t) {
+              }
+}
+</code></pre></li>
+</ul>
+<pre><code>      /**
+ * 动态将一个activity设置为透明主题
+ *
+ * @param activity
+ */
+public static void convertActivityToTranslucent(Activity activity) {
+    try {
+        Class&lt;?&gt;[] classes = Activity.class.getDeclaredClasses();
+        Class&lt;?&gt; translucentConversionListenerClazz = null;
+        for (Class clazz : classes) {
+            if (clazz.getSimpleName().contains(
+                    &quot;TranslucentConversionListener&quot;)) {
+                translucentConversionListenerClazz = clazz;
+            }
+        }
+        if (Build.VERSION.SDK_INT &lt; 21) {//这个也仅支持4.4及以上
+            Method method = Activity.class.getDeclaredMethod(
+                    &quot;convertToTranslucent&quot;,
+                    translucentConversionListenerClazz);
+            method.setAccessible(true);
+            method.invoke(activity, new Object[]{null});
+        } else {//5.0以上的系统
+            Method method = Activity.class.getDeclaredMethod(
+                    &quot;convertToTranslucent&quot;,
+                    translucentConversionListenerClazz,
+                    ActivityOptions.class);
+            method.setAccessible(true);
+            method.invoke(activity, null, null);
+        }
+    } catch (Throwable t) {
+        t.printStackTrace();
+    }
+}
+</code></pre><p><img src="http://upload-images.jianshu.io/upload_images/1740379-7deea03712813199.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="反编译某app.jpg"></p>
+<ul>
+<li><p>反编译了QQ空间的apk，他们把每个类的构造函数中添加了一行Zygote.class.getName()，Zygote是系统中存在的一个类。他们选用Zygote是android SDK中不存在的，被隐藏的类，他们应该是认为以后每个版本系统中都会有这个类，所以才选择了它。那么系统进行检查的时候就不会认为初始化该类只需要使用当前Dex。（<a href="">防止CLASS_ISPREVERIFIED </a>）</p>
+</li>
+<li><p>animation有个onAnimationStart和onAnmationEnd方法里面不可使用addView/removeView的方法，有可用handler.postRunable()来执行；开启硬件加速的时候有一些手机上会有概率性问题。硬件加速中draw流程只是进行录制，如果在录制的之后进行绘制的时候发现之前录制的已经无效了，在4.X的机型上就可能发生崩溃。动画的回调是在draw流程中执行的，在回调进行动态的removeView就会导致录制的绘制命令无效。</p>
+</li>
+<li>线程的使用</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">ArrayList &lt;File&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">scanDir</span><span class="params">(String dirString)</span></span>&#123;</div><div class="line">        File dirFile = <span class="keyword">new</span> File(dirString);</div><div class="line">        list.add(dirFile);</div><div class="line">        <span class="keyword">while</span> (list.size() &gt; <span class="number">0</span>)&#123;</div><div class="line">            File files[] = list.remove(<span class="number">0</span>).listFiles();</div><div class="line">            <span class="keyword">for</span>(File file : files)&#123;</div><div class="line">                <span class="keyword">if</span>(file.isDirectory())&#123;</div><div class="line">                    list.add(file);</div><div class="line">                &#125;<span class="keyword">else</span>&#123;</div><div class="line">                    <span class="keyword">if</span>(file.getAbsolutePath().endsWith(<span class="string">"mp3"</span>))&#123;</div><div class="line">                        Log.e(<span class="string">""</span>, <span class="string">"这是音乐文件"</span>);</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>把递归变成队列，再把队列变成多线程执行，下面只需要开启多个线程来执行scanDir()，比如一共有n+1(CPU核心数+1)个线程来执行scanDir()，当list有第一个元素时开启一个线程执行scanDir()，这个线程会往list中继续添加元素，当开启的线程小于n+1时，继续开启线程，直到达到n+1，达到之后就等待线程执行完毕，其中某个线程执行完毕之后再次去list中获取底部的元素来执行scanDir，直到list大小为0。</p>
+<ul>
+<li>LayoutParams 的问题<br>直接new出来 View 如果不设置LayoutParams 就 add进一个viewgroup类型  它的LayoutParams 是由 父viewgroup generateDefaultLayoutParams函数 决定的。</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/1740379-9cdc7a53d8ca49b2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="view1.png"></p>
+<ul>
+<li>类型强转的注意点<br>强转前加 if xxx instanceof xx的校验，典型问题：<br>兼容包下的控件getContext不能强转为Activity(布局文件写入控件，activity继承AppCompatActivity )<br>追溯View第二个构造函数发现context是LayoutInfalte传来的，发现是LayoutInflater.from传来的，发是phoneWindow传来的 发现newPhoneWindow(Activity)  ，这样按理说view的context本身就是activity，可是报错说是 tintContextWrapper</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/1740379-33a9834ad2181bbd.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="ImageView.png"></p>
+<ul>
+<li>activity在做动画的时候，页面的绘制是暂停的，或者只是绘制几帧。调用一个方法可以让其在动画过程中不暂停绘制。<br>反射调用<code>ViewRootImpl</code> 中的 <code>setDrawDuringWindowsAnimating(true)
+在</code>onAttachedToWindow后`调用(api 19及以上)类似的可以有：</li>
+</ul>
+<p><code>private boolean sInited = false;
+    private Method msetDrawDuringWindowsAnimatingMethod;
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        if (Build.VERSION.SDK_INT &gt; Build.VERSION_CODES.JELLY_BEAN_MR2 &amp;&amp; Build.VERSION.SDK_INT&lt; 24) {
+            Object viewRootImpl = ((Activity)getContext()).getWindow().getDecorView().getParent();
+            if (!sInited) {
+                try {
+                    msetDrawDuringWindowsAnimatingMethod = viewRootImpl.getClass().getMethod(&quot;setDrawDuringWindowsAnimating&quot;, boolean.class);
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                }
+                if (msetDrawDuringWindowsAnimatingMethod != null) {
+                    try {
+                        msetDrawDuringWindowsAnimatingMethod.invoke(viewRootImpl, true);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (InvocationTargetException e) {
+                        e.printStackTrace();
+                    }
+                }
+                sInited = true;
+            }
+        }
+    }</code></p>
+<ul>
+<li>优化View的inflate<br>如果你发现创建某个View的inflate很耗时，或者是measure和layout很耗时，你就只有采用类似这样的方式来优化它</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/1740379-9a3c26b48d3e6748.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="掌阅app代码.jpg"></p>
+<p>耗时的工作完成的，把addViewInLayout之类的post到主线程就行了。<br>只有被添加到View树上的时候才可能会绘制，刚inflate出来的View没有被添加到View树上，所以不会进行measure和layout。measure是耗时的，如果在线程中执行，它就会减少主线程的卡顿，最后再添加到View树上，并且不用触发requestLayout。相当于<a href="">异步加载view</a><br>使用场景：比如进入一个页面开启网络加载一段内容，当网络数据回来了就刷新页面，如果这个页面是列表，那么如果是正在滑动的时候刷新页面就会卡顿，这时就可以使用这种方式来进行优化。</p>
+<ul>
+<li>利用aapt解析apk信息<blockquote>
+<p>aapt dump badging demo.apk |grep version</p>
+</blockquote>
+</li>
+</ul>
+<p>aapt的其他参数，也比较使用，比如向apl中插入文件，删除文件，这个和unzip的效果是一样一样的。过去没用appt时，我们修改apk信息经常用zip/unzip，现在用appt也可以搞定，还能避免有的系统没有安装zip/unzip的问题</p>
+<blockquote>
+<p>aapt a demo.apk test.txt</p>
+</blockquote>
+<ul>
+<li><p>Activity被销毁分为两种：1. Activity对象被从ActivityThread中移除了，这时只是把java对象置null，如果你其他地方还持有该对象，这个activity是不会被释放的。 2. Activity所在的进程被回收，那它所有的资源都被回收了。只会有一些可序列化的数据被保存。</p>
+</li>
+<li><p>以下条件webview可以关闭硬件加速</p>
+</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/1740379-1d903c53b654aa35.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/620" alt="关闭硬件加速.jpg"></p>
+<pre><code>//mModelNumber = Build.MODEL;
+</code></pre><ul>
+<li>获取GPU刷新帧率</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/1740379-2de0f7c3ab1403a6.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/620" alt="GPU帧率.png"></p>
+<p>可以利用Looper的log机制和添加全局控件来自己实现那个柱状图。</p>
+<ul>
+<li>列表优化思路<br>1.item中不能使用任何xml，包括xml的drawable；2.减少View个数层级降低过度绘制；3.自己实现TextView，系统的TextView（特别是android 7.0以下系统）性能太烂。</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android-技能/" rel="tag"># android 技能</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/25/android-optimization/" rel="next" title="android项目优化（小结）">
+                <i class="fa fa-chevron-left"></i> android项目优化（小结）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/25/list-optimization/" rel="prev" title="图片列表页的优化策略">
+                图片列表页的优化策略 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <p class="site-author-name" itemprop="name">Tesla</p>
+            <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/rss2.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Harlber" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-globe"></i>GitHub</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tesla</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2145387"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

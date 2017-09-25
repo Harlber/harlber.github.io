@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java 引用," />
+
+
+
+
+  
+
+
+  <link rel="alternate" href="/rss2.xml" title="Keep learning" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="常见的面试中会有这么一道题，“谈谈强引用、 软引用、 弱引用、虚引用”。 A：强引用，通过new出来的都是强引用Q：那弱引用呢？A：通过WeakReference构造出的，不再有强引用…Q：那软引用呢，这些引用间的区别是什么？A：… 面到这个阶段这就比较尴尬了。为了避免类似的尴尬，特地花了点时间去整理这些引用，以便下次面试的时候就这个问题能和面试官谈笑风生。 首先可以在oracle的文档中找到相应">
+<meta name="keywords" content="Java 引用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java的Reference（引用）">
+<meta property="og:url" content="https://harlber.github.io/2017/09/25/Java-Reference/index.html">
+<meta property="og:site_name" content="Keep learning">
+<meta property="og:description" content="常见的面试中会有这么一道题，“谈谈强引用、 软引用、 弱引用、虚引用”。 A：强引用，通过new出来的都是强引用Q：那弱引用呢？A：通过WeakReference构造出的，不再有强引用…Q：那软引用呢，这些引用间的区别是什么？A：… 面到这个阶段这就比较尴尬了。为了避免类似的尴尬，特地花了点时间去整理这些引用，以便下次面试的时候就这个问题能和面试官谈笑风生。 首先可以在oracle的文档中找到相应">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-25T10:59:42.230Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java的Reference（引用）">
+<meta name="twitter:description" content="常见的面试中会有这么一道题，“谈谈强引用、 软引用、 弱引用、虚引用”。 A：强引用，通过new出来的都是强引用Q：那弱引用呢？A：通过WeakReference构造出的，不再有强引用…Q：那软引用呢，这些引用间的区别是什么？A：… 面到这个阶段这就比较尴尬了。为了避免类似的尴尬，特地花了点时间去整理这些引用，以便下次面试的时候就这个问题能和面试官谈笑风生。 首先可以在oracle的文档中找到相应">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://harlber.github.io/2017/09/25/Java-Reference/"/>
+
+
+
+
+
+  <title>Java的Reference（引用） | Keep learning</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Keep learning</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://harlber.github.io/2017/09/25/Java-Reference/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tesla">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Keep learning">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java的Reference（引用）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-25T18:58:41+08:00">
+                2017-09-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>常见的面试中会有这么一道题，“谈谈强引用、 软引用、 弱引用、虚引用”。</p>
+<p>A：强引用，通过new出来的都是强引用<br>Q：那弱引用呢？<br>A：通过WeakReference构造出的，不再有强引用…<br>Q：那软引用呢，这些引用间的区别是什么？<br>A：…</p>
+<p>面到这个阶段这就比较尴尬了。为了避免类似的尴尬，特地花了点时间去整理这些引用，以便下次面试的时候就这个问题能和面试官谈笑风生。</p>
+<p>首先可以在oracle的文档中找到相应的api说明<br>java.lang.ref<br>Class <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/ref/Reference.html" target="_blank" rel="external">Reference<t></t></a></p>
+<p><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html" target="_blank" rel="external">java.lang.Object</a><br>java.lang.ref.Reference<t></t></p>
+<p>Direct Known Subclasses:<br><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/ref/PhantomReference.html" target="_blank" rel="external">PhantomReference</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/ref/SoftReference.html" target="_blank" rel="external">SoftReference</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/ref/WeakReference.html" target="_blank" rel="external">WeakReference</a></p>
+<p>Abstract base class for reference objects. This class defines the operations common to all reference objects. Because reference objects are implemented in close cooperation with the garbage collector, this class may not be subclassed directly.<br>Since:<br>1.2</p>
+<p>事实上在JDK 1.2以前的版本中，若一个对象不被任何变量引用，那么程序就无法再使用这个对象。也就是说，只有对象处于可触及（reachable）状态，程序才能使用它。从JDK 1.2版本开始，把对象的引用分为4种级别，从而使程序能更加灵活地控制对象的生命周期。这4种级别由高到低依次为：强引用、软引用、弱引用和虚引用。</p>
+<p><a href="">Strong Reference</a>:<br>强引用是默认实现的引用。垃圾回收器不会回收具有强引用的对象，除非没有任何对象指向它时才会在一次GC 执行后被回收。<code>当内存空间不足，Java虚拟机宁愿抛出OutOfMemoryError错误，使程序异常终止，也不会靠随意回收具有强引用的对象来解决内存不足的问题</code>。<br>至此，也许犀利的你发现了这个现象：java中的Reference的子类中并没有一个叫 <strong>StrongReference</strong>的，在文章中写的也是<strong>Strong Reference</strong> 。stackoverflow上也有类似的讨论，<a href="http://stackoverflow.com/questions/15651896/why-is-there-no-strongreference-object" target="_blank" rel="external">点击查看</a>。</p>
+<p><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/ref/SoftReference.html" target="_blank" rel="external">SoftReference</a>：</p>
+<p><code>Soft reference objects, which are cleared at the discretion of the garbage collector in response to memory demand. Soft references are most often used to implement memory-sensitive caches.</code>Suppose that the garbage collector determines at a certain point in time that an object is <a href="">softly reachable</a>. At that time it may choose to clear atomically all soft references to that object and all soft references to any other softly-reachable objects from which that object is reachable through a chain of strong references. At the same time or at some later time it will enqueue those newly-cleared soft references that are registered with reference queues.<br><code>All soft references to softly-reachable objects are guaranteed to have been cleared before the virtual machine throws an OutOfMemoryError</code>. Otherwise no constraints are placed upon the time at which a soft reference will be cleared or the order in which a set of such references to different objects will be cleared. Virtual machine implementations are, however, encouraged to bias against clearing recently-created or recently-used soft references.<br><code>Direct instances of this class may be used to implement simple caches; this class or derived subclasses may also be used in larger data structures to implement more sophisticated caches.</code> <code>As long as the referent of a soft reference is strongly reachable, that is, is actually in use, the soft reference will not be cleared.</code>Thus a sophisticated cache can, for example, prevent its most recently used entries from being discarded by keeping strong referents to those entries, leaving the remaining entries to be discarded at the discretion of the garbage collector.</p>
+<p>请留意文档中标注的片段</p>
+<ul>
+<li><p>软引用对象时刻响应着内存状态<br><a href="">注意</a>  <code>这里并未明说内存不足时将回收软引用对象，内存充裕时则不会回收，待会儿的测试中就能应证这一点</code>。</p>
+</li>
+<li><p>软引用常用于实现高速缓存。<br>这里的缓存指的是高速内存缓存（区别于<a href="https://github.com/JakeWharton/DiskLruCache" target="_blank" rel="external">DiskLruCache</a>）。</p>
+</li>
+<li><p>所有引用了<code>软可及（softly-reachable）</code>的对象将在JVM抛出<code>OutOfMemoryError</code>异常前完成清除，回收工作。<br>由此可见<br>1.以SoftReference实现内存缓存是可靠的。<br>2.软引用对象存在多种状态：<code>软可及（softly-reachable）</code>只是其中一种状态。</p>
+</li>
+<li><p>SoftReference可被用来实现简单的高速缓存;SoftReference类或派生子类也可用于较大的数据结构中实现更复杂的高速缓存。</p>
+</li>
+<li>只要软引用对象是<code>强可及（strongly reachable）</code> 在实际应用中软引用将不会被清除。</li>
+</ul>
+<p>至此，我们可以通过一个简单的Test来验证。下文是一个通过的测试案例。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">softReference</span><span class="params">()</span> </span>&#123;</div><div class="line"><span class="comment">//测试环境，内存充足</span></div><div class="line">    Object referent = <span class="keyword">new</span> Object();</div><div class="line">    SoftReference&lt;Object&gt; softRerference = <span class="keyword">new</span> SoftReference&lt;Object&gt;(referent);</div><div class="line">    assertSame(referent, softRerference.get());<span class="comment">//referent '强可及'</span></div><div class="line">    System.gc(); </div><div class="line">    assertNotNull(softRerference.get());</div><div class="line">    assertNotNull(referent); </div><div class="line">    referent = <span class="keyword">null</span>;<span class="comment">//referent '软可及' </span></div><div class="line">    System.gc();</div><div class="line">    assertNotNull(softRerference.get()); <span class="comment">//referent '软可及'|内存充足，不会被被回收</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/ref/WeakReference.html" target="_blank" rel="external">WeakReference</a>：</p>
+<p>Weak reference objects, which do not prevent their referents from being made finalizable, finalized, and then reclaimed. <code>Weak references are most often used to implement canonicalizing mappings</code>.<strong>Suppose that the garbage collector determines at a certain point in time that an object is <a href="">weakly reachable</a>. At that time it will atomically clear all weak references to that object and all weak references to any other weakly-reachable objects from which that object is reachable through a chain of strong and soft references.</strong> At the same time it will declare all of the formerly weakly-reachable objects to be finalizable. At the same time or at some later time it will enqueue those newly-cleared weak references that are registered with reference queues.</p>
+<ul>
+<li>不论内存是否充裕，弱引用对象都将被回收</li>
+<li>弱引用不会阻扰引用对象进行finalizable，finalized还是reclaimed</li>
+<li>弱引用常用于实现<code>canonicalizing mappings</code>。<br>什么是canonicalizing mappings？在此引用一篇文章的解释。原文链接：<a href="http://c2.com/cgi/wiki?CanonicalizedMapping" target="_blank" rel="external">http://c2.com/cgi/wiki?CanonicalizedMapping</a></li>
+</ul>
+<p><code>A &quot;canonicalized&quot; mapping is where you keep one instance of the object in question in memory and all others look up that particular instance via pointers or somesuch mechanism. This is where weaks references can help.
+The short answer is that Weak Reference objects can be used to create pointers to objects in your system while still allowing those objects to be reclaimed by the garbage-collector once they pass out of scope.</code><br>通俗的说，弱引用的对象拥有更短暂的生命周期。在垃圾回收器线程扫描它所管辖的内存区域的过程中，一旦发现了只具有弱引用的对象，不管当前内存空间足够与否，都会回收它的内存。一个经典的弱引用的使用场景(请自行查阅<a href="">WeakHashMap</a>源码)：哈希表的接口允许使用任何Java对象作为键来使用。当一个键值对被放入到哈希表中之后，哈希表对象本身就有了对这些键和值对象的引用。如果这种引用是强引用的话，那么只要哈希表对象本身还存活，其中所包含的键和值对象是不会被回收的。如果某个存活时间很长的哈希表中包含的键值对很多，最终就有可能消耗掉JVM中全部的内存。</p>
+<p>同样的我们测试一下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Test</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">weakReference</span><span class="params">()</span> </span>&#123;</div><div class="line">    Object referent = <span class="keyword">new</span> Object();</div><div class="line">    WeakReference&lt;Object&gt; weakRerference = <span class="keyword">new</span> WeakReference&lt;Object&gt;(referent);     </div><div class="line">    assertSame(referent, weakRerference.get());<span class="comment">//referent '强可及'</span></div><div class="line">    System.gc();</div><div class="line">    assertNotNull(weakRerference.get());</div><div class="line">    assertNotNull(referent);<span class="comment">//referent '强可及' 不会被回收</span></div><div class="line">    referent = <span class="keyword">null</span>;<span class="comment">//取消强引用，referent '弱可及' </span></div><div class="line">    System.gc();</div><div class="line">    assertNull(weakRerference.get()); <span class="comment">//referent '弱可及'将被回收，此时内存充裕</span></div><div class="line">    referent = <span class="keyword">null</span>;</div><div class="line">    System.gc(); </div><div class="line">    assertNull(weakRerference.get()); <span class="comment">//referent `不可及`</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>‘强可及’，’软可及’ ，’弱可及’ ，’不可及’这些引用状态简直看的人一脸懵逼呀。先不要慌，我们来看看oracle是怎么定义这些状态的：<br><strong>Reachability</strong><br>Going from strongest to weakest, the different levels of reachability reflect the life cycle of an object. They are operationally defined as follows:</p>
+<ul>
+<li>An object is <code>strongly reachable</code> if it can be reached by some thread without traversing any reference objects. A newly-created object is strongly reachable by the thread that created it.<br>An object is <code>softly reachable</code> if it is not strongly reachable but can be reached by traversing a soft reference.</li>
+<li>An object is <code>weakly reachable</code> if it is neither strongly nor softly reachable but can be reached by traversing a weak reference. When the weak references to a weakly-reachable object are cleared, the object becomes eligible for finalization.</li>
+<li>An object is <code>phantom reachable</code> if it is neither strongly, softly, nor weakly reachable, it has been finalized, and some phantom reference refers to it.</li>
+<li>Finally, an object is <code>unreachable</code>, and therefore eligible for reclamation, when it is not reachable in any of the above ways.</li>
+</ul>
+<p>Since:<br>1.2<br>自然而然的<code>Since 1.2</code> ，看下文档再对比下Test，现在应该明朗多了吧。<br><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/ref/PhantomReference.html" target="_blank" rel="external">PhantomReference</a>：</p>
+<p>Phantom reference objects, which are enqueued after the collector determines that their referents may otherwise be reclaimed. <code>Phantom references are most often used for scheduling pre-mortem cleanup actions in a more flexible way than is possible with the Java finalization mechanism.</code>If the garbage collector determines at a certain point in time that the referent of a phantom reference is <a href="">phantom reachable</a>, then at that time or at some later time it will enqueue the reference.<br>In order to ensure that a reclaimable object remains so, the referent of a phantom reference may not be retrieved: The get  method of a phantom reference always returns null.<br><code>Unlike soft and weak references, phantom references are not automatically cleared by the garbage collector as they are enqueued. An object that is reachable via phantom references will remain so until all such references are cleared or themselves become unreachable.</code></p>
+<ul>
+<li>一个对象仅如果持有虚引用，那么它就和没有任何引用一样，在任何时候都可能被垃圾回收器回收。</li>
+<li>虚引用主要用来跟踪对象被垃圾回收器回收的活动。</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java-引用/" rel="tag"># Java 引用</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/25/list-optimization/" rel="next" title="图片列表页的优化策略">
+                <i class="fa fa-chevron-left"></i> 图片列表页的优化策略
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <p class="site-author-name" itemprop="name">Tesla</p>
+            <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/rss2.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Harlber" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-globe"></i>GitHub</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tesla</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2145387"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="android 性能优化," />
+
+
+
+
+
+  <link rel="alternate" href="/rss2.xml" title="Keep learning" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="应用启动页  把window的背景设置为闪屏页（这里官方建议是140x140的logo），一旦MainActivity加载完毕就显示主页了。虽然用户也会看到一个类似的闪屏页，但那个闪屏页实际只是activity在theme中设置的background。 &amp;lt;style name=&amp;quot;Theme_MyApp&amp;quot; parent=&amp;quot;@android:style/Theme.">
+<meta name="keywords" content="android 性能优化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="android项目优化（小结）">
+<meta property="og:url" content="https://harlber.github.io/2017/09/25/android-optimization/index.html">
+<meta property="og:site_name" content="Keep learning">
+<meta property="og:description" content="应用启动页  把window的背景设置为闪屏页（这里官方建议是140x140的logo），一旦MainActivity加载完毕就显示主页了。虽然用户也会看到一个类似的闪屏页，但那个闪屏页实际只是activity在theme中设置的background。 &amp;lt;style name=&amp;quot;Theme_MyApp&amp;quot; parent=&amp;quot;@android:style/Theme.">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1740379-870f3c2961889660.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1740379-06dac05b8113fa01.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1740379-0b20a71ccf86a8fb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1740379-e23be574fe00ef91.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1740379-6dabb976a91b26cc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1740379-a5d4304f2dc9071e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/620">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1740379-d30b31866d9469b8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/620">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1740379-8d173b965899359a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/620">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1740379-6db84b3ccef1dc26.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/620">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1740379-f98a45088b7401fe.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1740379-f65d3fcef932d4f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1740379-25ef2d48c73b6ca0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-09-25T10:54:59.483Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="android项目优化（小结）">
+<meta name="twitter:description" content="应用启动页  把window的背景设置为闪屏页（这里官方建议是140x140的logo），一旦MainActivity加载完毕就显示主页了。虽然用户也会看到一个类似的闪屏页，但那个闪屏页实际只是activity在theme中设置的background。 &amp;lt;style name=&amp;quot;Theme_MyApp&amp;quot; parent=&amp;quot;@android:style/Theme.">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1740379-870f3c2961889660.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://harlber.github.io/2017/09/25/android-optimization/"/>
+
+
+
+
+
+  <title>android项目优化（小结） | Keep learning</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Keep learning</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://harlber.github.io/2017/09/25/android-optimization/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Tesla">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Keep learning">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">android项目优化（小结）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-25T18:53:57+08:00">
+                2017-09-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>应用启动页</strong></p>
+<ul>
+<li><p>把window的背景设置为闪屏页（这里官方建议是140x140的logo），一旦MainActivity加载完毕就显示主页了。<br>虽然用户也会看到一个类似的闪屏页，但那个闪屏页实际只是activity在theme中设置的background。</p>
+<pre><code>&lt;style name=&quot;Theme_MyApp&quot; parent=&quot;@android:style/Theme.NoTitleBar.Fullscreen&quot;&gt;
+    //Theme.Light.NoTitleBar.Fullscreen
+    &lt;item name=&quot;android:windowBackground&quot;&gt;@drawable/preview&lt;/item&gt;
+    &lt;item name=&quot;android:windowNoTitle&quot;&gt;true&lt;/item&gt;
+    &lt;item name=&quot;android:windowContentOverlay&quot;&gt;@null&lt;/item&gt;
+&lt;/style&gt;
+//...
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;layer-list xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;
+   &lt;item android:drawable=&quot;@color/white&quot; /&gt;
+   &lt;item&gt;
+            &lt;bitmap
+                    android:src=&quot;@drawable/logo&quot; /&gt;
+   &lt;/item&gt;
+&lt;/layer-list&gt;
+//...
+public class MyMainActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+    // Make sure this is before calling super.onCreate
+         setTheme(R.style.Theme_MyApp);
+         super.onCreate(savedInstanceState);
+   // ...
+    }
+  }
+</code></pre></li>
+<li><p>Application中的onCreate()中耗时io操作进行新开线程处理，组件的注册，初始化延时操作。</p>
+</li>
+<li>对于分包项目，加载dex的耗时是引起第一次进入应用白屏的主要原因，对于一些组件的初始化，类似的，创建Preference 耗时大约2ms，初始化Fresco 耗时大约 245ms，而加载dex耗时则可达10s左右。<br>对于插件化项目，建议新开线程提前加载dex。</li>
+</ul>
+<p><strong>主页/MainActivity</strong><br>优化主页性能的最重要的指标是页面创建时间，及ActivityManager的Displayed时间。可由以下几点进行优化：</p>
+<ul>
+<li>xml 加载是(实质上inflate本身属于io操作)，因此可优化布局层数（基于inflate算法）<br>以掌阅和bilibili的app为例子，通过uiautomatorviewer分析首页，可以看出掌阅的主页层次深度是9层，而bilibili主页则是18层（2017-3-9时候的最新版本），相应的页面展示时间为：</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/1740379-870f3c2961889660.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="掌阅主页.png"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1740379-06dac05b8113fa01.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="bilibili主页.png"></p>
+<ul>
+<li>复杂的组合布局可直接通过自定义View的形式，以减少组件内部控件的measure，layout时间；同时也能减少布局层次。</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/1740379-0b20a71ccf86a8fb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="bilibili的tablayout.png"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1740379-e23be574fe00ef91.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="掌阅的tablayout.png"></p>
+<p><strong>绘制性能</strong></p>
+<ul>
+<li><p>检测activity的布局创建耗时<br>在Android Monitor的logcat中过滤查看ActivityManager条目，查看Displayed时间<br><img src="http://upload-images.jianshu.io/upload_images/1740379-6dabb976a91b26cc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="ActivityManager.png"></p>
+</li>
+<li><p>过度绘制检测（Overdraw）<br>在开发者模式中开启，对应用的每一个页面进行检测。<br>Overdraw有时候是因为你的UI布局存在大量重叠的部分，还有的时候是因为非必须的重叠背景。常见的是背景资源，根布局中设置了一遍，子布局中又进行多次设置。通常通过移除重复的背景资源，如移除Window的默认背景：</p>
+<pre><code>this.getWindow().setBackgroundDrawable(null);
+</code></pre></li>
+</ul>
+<p>对于自定义View，则通过设置ClipRect（canvas.clipRect(…)）区域进行过度绘制优化</p>
+<ul>
+<li><a href="https://developer.android.com/studio/profile/am-gpu.html" target="_blank" rel="external">gpu monitor</a><br>在开发者模式中开启GPU呈现模式图，分析每一个页面的gpu运行状态（需考虑在低端手机上的表现）。<br><a href="">蓝色偏高</a>，说明是单位消息里CPU太耗时，得把方法的执行都打出来看看哪个耗时。比如，在某处先看看是不是应该出现onMeasure，然后可以通过sdk自带的View布局工具，看一下哪个View的onMeasure耗时最多。<br><a href="">红色偏高</a>，说明GPU忙不过来。优化过渡绘制，使用离屏缓存来优化。<br><a href="">黄色偏高</a>，说明半透明GPU不仅在忙着绘制你的window也还忙着绘制别的，可能的情况为透明window叠加多了，window里的contentView有多个且相对复杂，或者GPU降频了等等，想具体分析需要查看GPU的trace。</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/1740379-a5d4304f2dc9071e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/620" alt=" Component bars 4.0 ~ 5.0.png"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1740379-d30b31866d9469b8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/620" alt="Android 6.0 and higher.png"></p>
+<ul>
+<li>HierarchyViewer<br>可完整，详细体现出每一个布局的创建耗时，优化每一个‘红灯’。</li>
+<li><p>布局复用，层级嵌套<br>结合HierarchyViewer分析，不多累赘。</p>
+</li>
+<li><p><a href="https://developer.android.com/studio/profile/am-methodtrace.html" target="_blank" rel="external">Method Tracer</a><br>在CPU monitor中点击计时器图标进行，将生成后的trace复制到 sdk/tools下（如test.trace）<br>在终端中执行</p>
+<pre><code>traceview.bat test.trace
+</code></pre></li>
+<li>自定义组件<br>部分复杂且可循环利用的ui需考虑写成自定义组件，手动实现onMeasure，onLayout同时亦可解决嵌套层级问题；此外可考虑动态添加控件以减少解决 xml 加载时间（inflate本身是io操作，而手机性能下降很大的一个原因就是io性能变差）。</li>
+</ul>
+<p><strong>内存管理</strong></p>
+<ul>
+<li>memory monitor<br>可在android studio中观测memory的变化（最准确的是使用adb dumpsys meminfo 来获取），在运行每一个页面的时候观测memory monitor中曲线变化，留意是否存在以下情形：<ul>
+<li>高内存占用<br>普通页面布局不复杂，加载图片少，却占用大量内存，如100M以上。</li>
+<li>内存抖动<br>大量对象频繁的创建，销毁能引起内存抖动。</li>
+<li>gc回收不明显<br>如在简洁页面下，手动gc，回收内存较少，且内存占用大，应考虑内存泄露 。</li>
+</ul>
+</li>
+<li>降低内存占用<br>a.在存在大量图片页面，尽可能采用软引用/弱引用对图片进行管理，降低对系统的负荷。<br>b.页面关闭时，主动进行释放资源（background置null等）。<br>c.Config常量文件拆分，按功能模块建立常量类，按需加载，减小常量池的大小（目前项目常量数，普遍在500个左右）。</li>
+<li>内存泄露<br> 可参考之前的<a href="http://www.jianshu.com/p/56f008065246" target="_blank" rel="external">文章</a><ul>
+<li>常见内存泄露场景<br>a.单例<br>尤其是部分带ui的单例，如dialog，因持有Context而发生泄露。<br>b.内部类<br>内部类（非静态内部类）的存在需依赖外部类实例（持有引用），常见的是Handler的泄露<br>c.观察者模式的反注册，常见的广播，各种事件总线<br>d.长连接，持续性<br>网络，流，数据库连接，动画的关闭。<br>e.native方法泄露<br>常见于bitmap的泄露，未对bitmap进行回收处理。</li>
+</ul>
+</li>
+</ul>
+<p>项目中重点检测各类Utils带Context/Activity参数的方法。</p>
+<ul>
+<li><p>资源兜底回收<br>复杂页面，抑或引用大量资源的页面，在关闭页面后，主动释放资源。</p>
+</li>
+<li><p>内存分析工具<br>a.MAT<br>b.Android studio自带memory monitor<br>c. <a href="https://github.com/square/leakcanary" target="_blank" rel="external">leakcanary</a><br>d.其他三方类库（github上的<a href="https://github.com/square/haha" target="_blank" rel="external">haha</a>等项目）</p>
+</li>
+</ul>
+<p><strong>网络请求</strong><br>在已有的功能基础上增加请求合并的功能，常见的实现方式为，在同一个请求队列中，对相同的请求进行合并以减少网络请求次数。<br><strong>应用体积压缩（瘦身）</strong></p>
+<ul>
+<li><p><a href="">删选so库</a> 了解应用的设备分布范围，常见的如x86平台的可以忽略（即不支持）</p>
+<pre><code> defaultConfig {
+         applicationId APPLICATION_ID
+         minSdkVersion MIN_SDK_VERSION as int
+         targetSdkVersion TARGET_SDK_VERSION as int
+         versionCode VERSION_CODE as int
+         versionName VERSION_NAME
+         multiDexEnabled MULTI_DEX_ENABLE as boolean
+         ndk {
+               abiFilters &apos;armeabi-v8a&apos;
+              //abiFilters &apos;x86&apos;, &apos;x86_64&apos;, &apos;armeabi&apos;,&apos;armeabi-v7a&apos;,&apos;armeabi-v8a&apos;
+       }
+}
+</code></pre></li>
+<li><p><a href="">压缩资源</a><br>a.采用tinypng可将图片压缩至原图的20%-50%<br>b.Drawable xml替代图片：常见的纯色的背景，同时由于是直接将 Shape 信息传到底层由 GPU 进行渲染，有一定程度上性能提升。<br>c.只保存一份图片资源（慎重）<br>目前市面上大部分机型都处于 xxhdpi 的适配范围，因此可以考虑只保留 xxhdpi 目录下一份图片资源。<br>d.删减资源</p>
+<pre><code> buildTypes {
+ release {
+     minifyEnabled true
+     shrinkResources true
+     proguardFiles getDefaultProguardFile(&apos;proguard-android.txt&apos;), &apos;proguard-rules.pro&apos;
+  }
+}
+</code></pre><p>e.移除未使用的备用资源</p>
+<pre><code>android {
+     defaultConfig {
+          ...
+          resConfigs &quot;en&quot;, &quot;fr&quot;
+    }
+}
+</code></pre><p>f.管理三方类库（因在建立项目之初即需考虑的问题）</p>
+<ul>
+<li>如项目中引入三方类库为解决某一个问题时（常见的是一些ui效果，在开发之初无充裕的时间成本），因此在优化阶段建议手动实现已减少依赖。</li>
+<li>合并，精简类库<br>某些带有重复功能的类库，类似的volley与okhttp，glide的类库，存在功能上的重叠，建议删选。</li>
+</ul>
+</li>
+</ul>
+<p><strong>线程监测</strong><br>在Android Studio中打开Tools/Android/Android Device Monitor，在mmds中查看应用线程状况，尤其是网络请求线程数目，状态</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1740379-8d173b965899359a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/620" alt="DDMS.png"></p>
+<p><strong>低内存</strong><br>在OnTrimMemory中主动释放可回收资源，取消动画效果，减少/合并网络请求。<br><strong>AS自带工具使用</strong></p>
+<ul>
+<li><a href="http://tools.android.com/tips/lint" target="_blank" rel="external">lint</a> 检测整个项目，Win下可在Terminal中执行命令<pre><code>gradlew lint
+</code></pre>或选中lint项</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/1740379-6db84b3ccef1dc26.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/620" alt="lint.png"></p>
+<p>根据文档建议修改（原则上消除每一个文件中的warning）.<br>也可以自定义规则检测项目代码规范。</p>
+<ul>
+<li>删除无用资源：<br>在Refactor中选择 Remove Unsed Resources…</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/1740379-f98a45088b7401fe.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Remove Unsed Resources....png"></p>
+<p><strong>其他代码细节</strong></p>
+<ul>
+<li>枚举<br>如仅仅实现标识静态常量的功能，不建议使用枚举，直接采用接口更为便捷，合理；在要保证参数类型安全的情况下（编译时类型安全），完全可以使用，不用在意这么点内存占用。</li>
+<li><p>View中的订阅与取消订阅<br>常见的如RxBus的使用，会在<strong><em>onCreate(Bundle savedInstanceState)</em></strong>中注册，在<strong><em>onDestroy()</em></strong>中取消注册，如：</p>
+<pre><code> @Override
+ protected void onCreate(Bundle savedInstanceState) {
+          super.onCreate(savedInstanceState);
+          setContentView(setLayout());
+          //注册事件
+         RxBus.getInstance().register(RxEvent.INQUIRY,this);
+ }
+@Override
+ public void onDestroy(){
+        //解绑注册
+       RxBus.getInstance().unregister(RxEvent.INQUIRY,this);
+       super.onDestroy();
+ }
+</code></pre><p>更为合理的方式则是以页面挂载/卸载为标准</p>
+<pre><code>@Override protected void onAttachedToWindow() {
+          RxBus.getInstance().register(RxEvent.INQUIRY,this);
+     }
+
+@Override protected void onDetachedFromWindow() {
+         super.onDetachedFromWindow();
+         RxBus.getInstance().unregister(RxEvent.INQUIRY,this);
+    }
+</code></pre><p>参考：<a href="https://medium.com/square-corner-blog/android-leak-pattern-subscriptions-in-views-18f0860aa74c#.efkkxrsdy" target="_blank" rel="external">android-leak-pattern-subscriptions-in-views</a></p>
+</li>
+<li><p>引导用户添加进白名单</p>
+</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/1740379-f65d3fcef932d4f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="startactivity.png"></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1740379-25ef2d48c73b6ca0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="whitelist.png"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android-性能优化/" rel="tag"># android 性能优化</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/25/read-clean-code/" rel="next" title="读书有感-《代码整洁之道》">
+                <i class="fa fa-chevron-left"></i> 读书有感-《代码整洁之道》
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/25/android-kit/" rel="prev" title="日常开发技能指南（杂谈,持续更新）">
+                日常开发技能指南（杂谈,持续更新） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="uyan_frame"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <p class="site-author-name" itemprop="name">Tesla</p>
+            <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/rss2.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Harlber" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-globe"></i>GitHub</a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Tesla</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+    
+
+    
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2145387"></script>
+      <!-- UY END -->
+    
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
