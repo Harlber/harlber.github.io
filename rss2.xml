@@ -8,8 +8,28 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Tue, 26 Sep 2017 02:22:10 GMT</pubDate>
+    <pubDate>Wed, 27 Sep 2017 15:21:29 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>Life is Tough</title>
+      <link>https://harlber.github.io/2017/09/27/life-is-tough/</link>
+      <guid>https://harlber.github.io/2017/09/27/life-is-tough/</guid>
+      <pubDate>Wed, 27 Sep 2017 12:25:46 GMT</pubDate>
+      <description>
+      
+        
+        
+          &lt;p&gt;   前天，也就是九月二十五日，花了半天时间，用Hexo + Github搭建了这个blog。这是一直以来都很想做躺在待做事宜中很久的一件事。其实很多事又何尝不是这样呢，不是能力的问题，而是态度的问题。&lt;/p&gt;
+&lt;p&gt;自15年年底遭遇的身体打击以来，一蹶不振。当医生告诉你最
+        
+      
+      </description>
+      
+      <content:encoded><![CDATA[<p>   前天，也就是九月二十五日，花了半天时间，用Hexo + Github搭建了这个blog。这是一直以来都很想做躺在待做事宜中很久的一件事。其实很多事又何尝不是这样呢，不是能力的问题，而是态度的问题。</p><p>自15年年底遭遇的身体打击以来，一蹶不振。当医生告诉你最多能活多久的时候，第一次感受到生命的渺小。庆幸是一次不准确诊断，但还是进入一年多的颓废期。</p><p>近期约见了一些大学同学，朋友，深入交流下技术，生活方面的种种。回首一望，二十又五年了，生活平平淡淡，工作平平，错失了很多机会。是的，需要深刻反思下，我究竟要怎样的生活？在近期经历太多太多的事后，想通了，决定了。</p><p>首先是blog的域名：jidanlee.com 。太多太多的话，尽在不言中，买下这个域名作为和一个女孩真挚感情的凭证，也作为激励自己的动力。</p><p>前段时间一直失眠，不断反思自己所走的这条技术之路，辗转反侧，夜半惊醒满脑子就两个字：规划–职业规划 。在此定下即将过去的17年的规划：</p><ul><li>换一份工作</li><li>养成一个好习惯（早睡早起）</li><li>坚持做一件事：健身</li><li>看书：<br> 1.软件安全与逆向<br> 2.代码整洁之道（已看过一遍，重构完公司项目后再阅读一次）<br> 3.深入理解java虚拟机 （之前一直断断续续）<br> 4.java并发实战（基础章节看完）</li><li>学一门新语言（Python）</li><li>阅读部分框架完成源码分析（Okhttp，Glide，Gson，Volley，EventBus）</li></ul><p>用一句话形容下当下生活，一定是：生于忧患，死于安乐。<br>但对生活的态度，非常喜欢这一句：我命由我不由天。<br>从此刻开始，</p><ul><li>认真对待每一件事，每一个人</li><li>对所写的每一句代码负责</li></ul><p>2017-09-27 23:14:17</p>]]></content:encoded>
+      
+      <comments>https://harlber.github.io/2017/09/27/life-is-tough/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>Java的Reference（引用）</title>
