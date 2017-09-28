@@ -8,8 +8,28 @@
     <atom:link href="/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description></description>
-    <pubDate>Wed, 27 Sep 2017 15:21:29 GMT</pubDate>
+    <pubDate>Thu, 28 Sep 2017 10:47:07 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>善待 if-else</title>
+      <link>https://harlber.github.io/2017/09/28/if-else/</link>
+      <guid>https://harlber.github.io/2017/09/28/if-else/</guid>
+      <pubDate>Thu, 28 Sep 2017 10:37:52 GMT</pubDate>
+      <description>
+      
+        
+        
+          &lt;p&gt;同事跟我说，之前负责的模块线上版本有个&lt;code&gt;ListView复用错乱&lt;/code&gt;的坑，由于近期一直负责基于插件化的项目重构，因此这个bug被分配给了某位同僚。心想，怎么会犯这么低级的错误呢，赶紧checkout出那个分支看了下。原因很简单，却很有代表性。&lt;/p&gt;
+&lt;
+        
+      
+      </description>
+      
+      <content:encoded><![CDATA[<p>同事跟我说，之前负责的模块线上版本有个<code>ListView复用错乱</code>的坑，由于近期一直负责基于插件化的项目重构，因此这个bug被分配给了某位同僚。心想，怎么会犯这么低级的错误呢，赶紧checkout出那个分支看了下。原因很简单，却很有代表性。</p><p>大致代码如下：<br>   <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">else</span> <span class="keyword">if</span> (index.getType().equals(<span class="string">"1"</span>)) &#123; <span class="comment">//if-1</span></div><div class="line">     viewHolder.et_attr_in.setVisibility(View.GONE);</div><div class="line">     viewHolder.tv_attr_select.setVisibility(View.VISIBLE);</div><div class="line">         <span class="keyword">if</span> (isEdit &amp;&amp; !index.getResult().equals(<span class="string">""</span>)) &#123;  <span class="comment">//if-2</span></div><div class="line">            viewHolder.tv_attr_select.setText(index.getResult());</div><div class="line">         &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!index.getResult().equals(<span class="string">""</span>)) &#123; <span class="comment">//if-3</span></div><div class="line">            viewHolder.tv_attr_select.setText(index.getResult());</div><div class="line">         &#125;</div></pre></td></tr></table></figure></p><p>问题出在<code>if-2</code>这里，实际上紧跟的else并未包含所有的case。<br>在此总结下良好的if-else代码块处理方式（建议）<br> <strong>当类似的if中存在多个判断条件时，要确保每一个case都有相应的处理</strong><br> <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(condition1 | condition2)&#123; <span class="comment">//block-1</span></div><div class="line">   <span class="comment">//some code</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p><p>在此要充分考虑<code>condition1</code>，<code>condition2</code>分别为true/false的情况</p><p> <strong>if与else 一一对应</strong><br>通常会遇到的一种情况是满足if条件才是有意义的逻辑，而通常省略else 在这种情况，除了添加else闭合处理逻辑外，更可以在else中添加断言或抛出异常:<br> <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (condition) &#123;</div><div class="line">   <span class="comment">//good code</span></div><div class="line">   &#125; <span class="keyword">else</span> &#123;</div><div class="line">   <span class="comment">//useless code</span></div><div class="line">   <span class="keyword">throw</span> <span class="keyword">new</span> UnkonwException(<span class="string">"Bad condition occured!"</span>);</div><div class="line"> &#125;</div></pre></td></tr></table></figure></p><p> <strong>多重if嵌套</strong><br>当存在2重以上if嵌套时，应及时添加注释，注明判断边界：<br> <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (condition1) &#123;</div><div class="line">     <span class="comment">//some code</span></div><div class="line">      <span class="keyword">if</span> (condition2) &#123;</div><div class="line">          <span class="comment">//some code</span></div><div class="line">          <span class="keyword">if</span> (condition3) &#123;</div><div class="line">              <span class="comment">//...</span></div><div class="line">          &#125; <span class="comment">//end-if condition3</span></div><div class="line">      &#125;<span class="comment">//end-if condition2</span></div><div class="line">&#125;<span class="comment">//end-if condition1</span></div></pre></td></tr></table></figure></p><p>生命不息，挖坑不止~</p>]]></content:encoded>
+      
+      <comments>https://harlber.github.io/2017/09/28/if-else/#disqus_thread</comments>
+    </item>
     
     <item>
       <title>Life is Tough</title>

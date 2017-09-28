@@ -53,7 +53,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="简书," />
+  <meta name="keywords" content="Java," />
 
 
 
@@ -71,18 +71,18 @@
 
 
 
-<meta name="description" content="原简书上的博客 http://www.jianshu.com/u/9e472bc10163 现搬家到这里了。">
-<meta name="keywords" content="简书">
+<meta name="description" content="同事跟我说，之前负责的模块线上版本有个ListView复用错乱的坑，由于近期一直负责基于插件化的项目重构，因此这个bug被分配给了某位同僚。心想，怎么会犯这么低级的错误呢，赶紧checkout出那个分支看了下。原因很简单，却很有代表性。 大致代码如下：   12345678else if (index.getType().equals(&quot;1&quot;)) &amp;#123; //if-1     viewHol">
+<meta name="keywords" content="Java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="博客搬家了">
-<meta property="og:url" content="https://harlber.github.io/2017/09/25/hello_blog/index.html">
+<meta property="og:title" content="善待 if-else">
+<meta property="og:url" content="https://harlber.github.io/2017/09/28/if-else/index.html">
 <meta property="og:site_name" content="Keep learning">
-<meta property="og:description" content="原简书上的博客 http://www.jianshu.com/u/9e472bc10163 现搬家到这里了。">
+<meta property="og:description" content="同事跟我说，之前负责的模块线上版本有个ListView复用错乱的坑，由于近期一直负责基于插件化的项目重构，因此这个bug被分配给了某位同僚。心想，怎么会犯这么低级的错误呢，赶紧checkout出那个分支看了下。原因很简单，却很有代表性。 大致代码如下：   12345678else if (index.getType().equals(&quot;1&quot;)) &amp;#123; //if-1     viewHol">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-26T02:21:58.824Z">
+<meta property="og:updated_time" content="2017-09-28T10:47:07.240Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="博客搬家了">
-<meta name="twitter:description" content="原简书上的博客 http://www.jianshu.com/u/9e472bc10163 现搬家到这里了。">
+<meta name="twitter:title" content="善待 if-else">
+<meta name="twitter:description" content="同事跟我说，之前负责的模块线上版本有个ListView复用错乱的坑，由于近期一直负责基于插件化的项目重构，因此这个bug被分配给了某位同僚。心想，怎么会犯这么低级的错误呢，赶紧checkout出那个分支看了下。原因很简单，却很有代表性。 大致代码如下：   12345678else if (index.getType().equals(&quot;1&quot;)) &amp;#123; //if-1     viewHol">
 
 
 
@@ -112,13 +112,13 @@
 
 
 
-  <link rel="canonical" href="https://harlber.github.io/2017/09/25/hello_blog/"/>
+  <link rel="canonical" href="https://harlber.github.io/2017/09/28/if-else/"/>
 
 
 
 
 
-  <title>博客搬家了 | Keep learning</title>
+  <title>善待 if-else | Keep learning</title>
   
 
 
@@ -245,7 +245,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://harlber.github.io/2017/09/25/hello_blog/">
+    <link itemprop="mainEntityOfPage" href="https://harlber.github.io/2017/09/28/if-else/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Tesla">
@@ -262,7 +262,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">博客搬家了</h1>
+          <h1 class="post-title" itemprop="name headline">善待 if-else</h1>
         
 
         <div class="post-meta">
@@ -274,8 +274,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-25T15:58:41+08:00">
-                2017-09-25
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-28T18:37:52+08:00">
+                2017-09-28
               </time>
             
 
@@ -312,7 +312,13 @@
       
 
       
-        <p>原简书上的博客 <a href="http://www.jianshu.com/u/9e472bc10163" target="_blank" rel="external">http://www.jianshu.com/u/9e472bc10163</a> 现搬家到这里了。</p>
+        <p>同事跟我说，之前负责的模块线上版本有个<code>ListView复用错乱</code>的坑，由于近期一直负责基于插件化的项目重构，因此这个bug被分配给了某位同僚。心想，怎么会犯这么低级的错误呢，赶紧checkout出那个分支看了下。原因很简单，却很有代表性。</p>
+<p>大致代码如下：<br>   <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">else</span> <span class="keyword">if</span> (index.getType().equals(<span class="string">"1"</span>)) &#123; <span class="comment">//if-1</span></div><div class="line">     viewHolder.et_attr_in.setVisibility(View.GONE);</div><div class="line">     viewHolder.tv_attr_select.setVisibility(View.VISIBLE);</div><div class="line">         <span class="keyword">if</span> (isEdit &amp;&amp; !index.getResult().equals(<span class="string">""</span>)) &#123;  <span class="comment">//if-2</span></div><div class="line">            viewHolder.tv_attr_select.setText(index.getResult());</div><div class="line">         &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!index.getResult().equals(<span class="string">""</span>)) &#123; <span class="comment">//if-3</span></div><div class="line">            viewHolder.tv_attr_select.setText(index.getResult());</div><div class="line">         &#125;</div></pre></td></tr></table></figure></p>
+<p>问题出在<code>if-2</code>这里，实际上紧跟的else并未包含所有的case。<br>在此总结下良好的if-else代码块处理方式（建议）<br> <strong>当类似的if中存在多个判断条件时，要确保每一个case都有相应的处理</strong><br> <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span>(condition1 | condition2)&#123; <span class="comment">//block-1</span></div><div class="line">   <span class="comment">//some code</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在此要充分考虑<code>condition1</code>，<code>condition2</code>分别为true/false的情况</p>
+<p> <strong>if与else 一一对应</strong><br>通常会遇到的一种情况是满足if条件才是有意义的逻辑，而通常省略else 在这种情况，除了添加else闭合处理逻辑外，更可以在else中添加断言或抛出异常:<br> <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (condition) &#123;</div><div class="line">   <span class="comment">//good code</span></div><div class="line">   &#125; <span class="keyword">else</span> &#123;</div><div class="line">   <span class="comment">//useless code</span></div><div class="line">   <span class="keyword">throw</span> <span class="keyword">new</span> UnkonwException(<span class="string">"Bad condition occured!"</span>);</div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
+<p> <strong>多重if嵌套</strong><br>当存在2重以上if嵌套时，应及时添加注释，注明判断边界：<br> <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> (condition1) &#123;</div><div class="line">     <span class="comment">//some code</span></div><div class="line">      <span class="keyword">if</span> (condition2) &#123;</div><div class="line">          <span class="comment">//some code</span></div><div class="line">          <span class="keyword">if</span> (condition3) &#123;</div><div class="line">              <span class="comment">//...</span></div><div class="line">          &#125; <span class="comment">//end-if condition3</span></div><div class="line">      &#125;<span class="comment">//end-if condition2</span></div><div class="line">&#125;<span class="comment">//end-if condition1</span></div></pre></td></tr></table></figure></p>
+<p>生命不息，挖坑不止~</p>
 
       
     </div>
@@ -330,7 +336,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/简书/" rel="tag"># 简书</a>
+            <a href="/tags/Java/" rel="tag"># Java</a>
           
         </div>
       
@@ -343,15 +349,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2017/09/27/life-is-tough/" rel="next" title="Life is Tough">
+                <i class="fa fa-chevron-left"></i> Life is Tough
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/09/25/逆向某fun/" rel="prev" title="逆向某fun">
-                逆向某fun <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
